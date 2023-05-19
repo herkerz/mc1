@@ -1,3 +1,18 @@
 MATCH (node:Nodos)-[r:ownership|membership|partnership|family_relationship]-(n:Nodos)
 WHERE node.id = "Mar de la Vida OJSC"
 RETURN node, r, n
+
+
+MATCH (node:Nodos)-[r:ownership|membership|partnership|family_relationship]-(n:Nodos)
+WHERE node.id = "Mar de la Vida OJSC" OR
+		  node.id = "979893388" OR
+      node.id = "Oceanfront Oasis Inc Carriers" OR
+      node.id = "8327"
+RETURN node, r, n
+
+MATCH (node:Nodos)-[r:ownership]-(n:Nodos)
+WHERE node.id = "Mar de la Vida OJSC" OR
+		  node.id = "979893388" OR
+      node.id = "Oceanfront Oasis Inc Carriers" OR
+      node.id = "8327"
+RETURN node, r, n

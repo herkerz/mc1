@@ -1,0 +1,3 @@
+MATCH (node:Nodos)-[r:ownership|membership|partnership|family_relationship]-(n:Nodos)
+WHERE node.id = "Mar de la Vida OJSC"
+RETURN node, r, n

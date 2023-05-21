@@ -13,9 +13,9 @@ csv_file = "links.csv"
 create_query = """
 LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
 MATCH (source)
-WHERE source.id = row.source AND row.type = 'ownership' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:blank)
+WHERE source.id = row.source AND row.type = 'ownership' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:notype OR source:event OR source:movement)
 MATCH (target)
-WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:blank)
+WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:notype OR target:event OR target:movement)
 CREATE (source)-[:ownership]->(target)
 """
 
@@ -31,9 +31,9 @@ with driver.session() as session:
 create_query = """
 LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
 MATCH (source)
-WHERE source.id = row.source AND row.type = 'membership' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:blank)
+WHERE source.id = row.source AND row.type = 'membership' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:notype OR source:event OR source:movement)
 MATCH (target)
-WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:blank)
+WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:notype OR target:event OR target:movement)
 CREATE (source)-[:membership]->(target)
 """
 
@@ -46,9 +46,9 @@ with driver.session() as session:
 create_query = """
 LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
 MATCH (source)
-WHERE source.id = row.source AND row.type = 'family_relationship' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:blank)
+WHERE source.id = row.source AND row.type = 'family_relationship' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:notype OR source:event OR source:movement)
 MATCH (target)
-WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:blank)
+WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:notype OR target:event OR target:movement)
 CREATE (source)-[:family_relationship]->(target)
 """
 
@@ -63,9 +63,9 @@ create_query = """
 
 LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
 MATCH (source)
-WHERE source.id = row.source AND row.type = 'partnership' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:blank)
+WHERE source.id = row.source AND row.type = 'partnership' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:notype OR source:event OR source:movement)
 MATCH (target)
-WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:blank)
+WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:notype OR target:event OR target:movement)
 CREATE (source)-[:partnership]->(target)
 """
 

@@ -6,11 +6,10 @@ driver = GraphDatabase.driver("bolt://localhost:7687", auth=("neo4j", "a"))
 
 # Define the Cypher query
 cypher_query = """
-MATCH (node:Nodos)-[r:ownership|membership|partnership|family_relationship]-(n:Nodos)
-WHERE node.id = "Mar de la Vida OJSC" OR
-	    node.id = "979893388" OR
-        node.id = "Oceanfront Oasis Inc Carriers" OR
-        node.id = "8327"
+MATCH (node)-[r:ownership|membership|partnership|family_relationship]-(n)
+WHERE (node:organization OR node:company OR node:person OR node:political_organization OR node:vessel OR node:location OR node:notype)
+  AND (n:organization OR n:company OR n:person OR n:political_organization OR n:vessel OR n:location OR n:notype)
+  AND node.id IN ["Mar de la Vida OJSC", "979893388", "Oceanfront Oasis Inc Carriers", "8327"]
 RETURN node, r, n
 """
 

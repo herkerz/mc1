@@ -4,22 +4,130 @@ import csv
 # Neo4j connection details
 uri = "bolt://localhost:7687"
 username = "neo4j"
-password = "PASSWORD"
+password = "a"
 
 # CSV file path
 csv_file = "nodes.csv"
 
+driver = GraphDatabase.driver(uri, auth=(username, password))
+
 # Cypher query to create nodes and relationships
 create_query = """
 LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
-CREATE (n:Nodos)
-SET n.type = row.type,
-    n.country = row.country,
-    n.id = row.id
+FOREACH (_ IN CASE WHEN row.type = 'person' THEN [1] ELSE [] END |
+    CREATE (n:person)
+    SET n.type = row.type,
+        n.country = row.country,
+        n.id = row.id
+)
+
 """
 
 # Connect to Neo4j
-driver = GraphDatabase.driver(uri, auth=(username, password))
+
+
+# Open a Neo4j session
+with driver.session() as session:
+    # Execute the Cypher query to create nodes and relationships
+    session.run(create_query.format(csv_file=csv_file))
+
+
+# Cypher query to create nodes and relationships
+create_query = """
+LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
+FOREACH (_ IN CASE WHEN row.type = 'organization' THEN [1] ELSE [] END |
+    CREATE (n:organization)
+    SET n.type = row.type,
+        n.country = row.country,
+        n.id = row.id
+)
+"""
+
+
+# Open a Neo4j session
+with driver.session() as session:
+    # Execute the Cypher query to create nodes and relationships
+    session.run(create_query.format(csv_file=csv_file))
+    
+    
+# Cypher query to create nodes and relationships
+create_query = """
+LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
+FOREACH (_ IN CASE WHEN row.type = 'company' THEN [1] ELSE [] END |
+    CREATE (n:company)
+    SET n.type = row.type,
+        n.country = row.country,
+        n.id = row.id
+)
+"""
+
+# Open a Neo4j session
+with driver.session() as session:
+    # Execute the Cypher query to create nodes and relationships
+    session.run(create_query.format(csv_file=csv_file))
+    
+
+# Cypher query to create nodes and relationships
+create_query = """
+LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
+FOREACH (_ IN CASE WHEN row.type = 'political_organization' THEN [1] ELSE [] END |
+    CREATE (n:political_organization)
+    SET n.type = row.type,
+        n.country = row.country,
+        n.id = row.id
+)
+"""
+
+# Open a Neo4j session
+with driver.session() as session:
+    # Execute the Cypher query to create nodes and relationships
+    session.run(create_query.format(csv_file=csv_file))
+    
+
+# Cypher query to create nodes and relationships
+create_query = """
+LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
+FOREACH (_ IN CASE WHEN row.type = 'vessel' THEN [1] ELSE [] END |
+    CREATE (n:vessel)
+    SET n.type = row.type,
+        n.country = row.country,
+        n.id = row.id
+)
+"""
+
+# Open a Neo4j session
+with driver.session() as session:
+    # Execute the Cypher query to create nodes and relationships
+    session.run(create_query.format(csv_file=csv_file))
+
+
+# Cypher query to create nodes and relationships
+create_query = """
+LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
+FOREACH (_ IN CASE WHEN row.type = 'location' THEN [1] ELSE [] END |
+    CREATE (n:location)
+    SET n.type = row.type,
+        n.country = row.country,
+        n.id = row.id
+)
+"""
+
+# Open a Neo4j session
+with driver.session() as session:
+    # Execute the Cypher query to create nodes and relationships
+    session.run(create_query.format(csv_file=csv_file))
+    
+
+# Cypher query to create nodes and relationships
+create_query = """
+LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
+FOREACH (_ IN CASE WHEN row.type = '' THEN [1] ELSE [] END |
+    CREATE (n:blank)
+    SET n.type = row.type,
+        n.country = row.country,
+        n.id = row.id
+)
+"""
 
 # Open a Neo4j session
 with driver.session() as session:

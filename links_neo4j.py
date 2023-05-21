@@ -4,7 +4,7 @@ import csv
 # Neo4j connection details
 uri = "bolt://localhost:7687"
 username = "neo4j"
-password = "PASSWORD"
+password = "a"
 
 # CSV file path
 csv_file = "links.csv"
@@ -12,8 +12,10 @@ csv_file = "links.csv"
 # Cypher query to create relationships
 create_query = """
 LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
-MATCH (source:Nodos), (target:Nodos)
-WHERE source.id = row.source AND target.id = row.target AND row.type = 'ownership'
+MATCH (source)
+WHERE source.id = row.source AND row.type = 'ownership' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:blank)
+MATCH (target)
+WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:blank)
 CREATE (source)-[:ownership]->(target)
 """
 
@@ -28,8 +30,10 @@ with driver.session() as session:
 # Cypher query to create relationships
 create_query = """
 LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
-MATCH (source:Nodos), (target:Nodos)
-WHERE source.id = row.source AND target.id = row.target AND row.type = 'membership'
+MATCH (source)
+WHERE source.id = row.source AND row.type = 'membership' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:blank)
+MATCH (target)
+WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:blank)
 CREATE (source)-[:membership]->(target)
 """
 
@@ -41,8 +45,10 @@ with driver.session() as session:
 # Cypher query to create relationships
 create_query = """
 LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
-MATCH (source:Nodos), (target:Nodos)
-WHERE source.id = row.source AND target.id = row.target AND row.type = 'family_relationship'
+MATCH (source)
+WHERE source.id = row.source AND row.type = 'family_relationship' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:blank)
+MATCH (target)
+WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:blank)
 CREATE (source)-[:family_relationship]->(target)
 """
 
@@ -54,9 +60,12 @@ with driver.session() as session:
 
 # Cypher query to create relationships
 create_query = """
+
 LOAD CSV WITH HEADERS FROM 'file:///{csv_file}' AS row
-MATCH (source:Nodos), (target:Nodos)
-WHERE source.id = row.source AND target.id = row.target AND row.type = 'partnership'
+MATCH (source)
+WHERE source.id = row.source AND row.type = 'partnership' AND (source:organization OR source:company OR source:person OR source:political_organization OR source:vessel OR source:location OR source:blank)
+MATCH (target)
+WHERE target.id = row.target AND (target:organization OR target:company OR target:person OR target:political_organization OR target:vessel OR target:location OR target:blank)
 CREATE (source)-[:partnership]->(target)
 """
 

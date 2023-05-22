@@ -21,14 +21,27 @@ with driver.session() as session:
 # Create a Pyvis Network object
 network = Network(height="500px", width="100%", notebook=True)
 
+# Define node colors based on source type
+node_colors = {
+    "organization": "navy",
+    "company": "darkgreen",
+    "person": "darkorange",
+    "political_organization": "red",
+    "vessel": "magenta",
+    "location": "purple",
+    "notype": "darkgrey",
+    "event": "cyan",
+    "movement": "black"
+}
+
 # Add nodes and edges to the network
 for source, source_type, target, target_type, relation_type in graph_data:
-    network.add_node(source, title =source_type )
-    network.add_node(target, title = target_type)
+    network.add_node(source, title=source_type, color=node_colors.get(source_type, "gray"))
+    network.add_node(target, title=target_type, color=node_colors.get(target_type, "gray"))
     network.add_edge(source, target, title=relation_type)
 
 # Visualize the network
-network.show("graph.html")
+network.show("graph_color.html")
 
 # Close the Neo4j driver connection
 driver.close()

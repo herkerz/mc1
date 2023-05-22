@@ -16,3 +16,10 @@ WHERE node.id = "Mar de la Vida OJSC" OR
       node.id = "Oceanfront Oasis Inc Carriers" OR
       node.id = "8327"
 RETURN node, r, n
+
+
+MATCH (node)-[r:ownership|membership|partnership|family_relationship]-(n)
+WHERE (node:organization OR node:company OR node:person OR node:political_organization OR node:vessel OR node:location OR node:notype OR node:event OR node:movement)
+  AND (n:organization OR n:company OR n:person OR n:political_organization OR n:vessel OR n:location OR n:notype OR node:event OR node:movement)
+  AND node.id IN ["Mar de la Vida OJSC", "979893388", "Oceanfront Oasis Inc Carriers", "8327"]
+RETURN node, r, n

@@ -2,7 +2,7 @@ from neo4j import GraphDatabase
 from pyvis.network import Network
 
 # Connect to the Neo4j database
-driver = GraphDatabase.driver("bolt://localhost:7687", auth=("neo4j", "a"))
+driver = GraphDatabase.driver("bolt://localhost:7687", auth=("neo4j", "PASSWORD"))
 
 # Define the Cypher query
 cypher_query = """

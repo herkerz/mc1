@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 500px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "John Gonzalez", "image": "https://www.pngall.com/wp-content/uploads/13/Futurama-PNG-File.png", "label": "John Gonzalez", "shape": "image", "title": "person"}, {"color": "green", "id": "979893388", "label": "979893388", "shape": "star", "title": "organization"}, {"color": "orange", "id": "Oceanfront Oasis Inc Carriers", "label": "Oceanfront Oasis Inc Carriers", "shape": "star", "title": "notype"}, {"color": "#a6cee3", "id": "9345", "label": "9345", "shape": "dot", "title": "political_organization"}, {"color": "navy", "id": "Mar de la Vida OJSC", "label": "Mar de la Vida OJSC", "shape": "star", "title": "notype"}, {"color": "#a6cee3", "id": "Sept", "label": "Sept", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "b1a0ee2a-0e6d-48c2-b639-032e4648fa5c", "label": "b1a0ee2a-0e6d-48c2-b639-032e4648fa5c", "shape": "dot", "title": "location"}, {"color": "#a6cee3", "id": "f21800ca-b3c9-404b-8438-3d75ea84c409", "label": "f21800ca-b3c9-404b-8438-3d75ea84c409", "shape": "dot", "title": "location"}, {"color": "#a6cee3", "id": "903311212", "label": "903311212", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "7505050", "label": "7505050", "shape": "dot", "title": "organization"}, {"color": "purple", "id": "8327", "label": "8327", "shape": "star", "title": "organization"}, {"color": "#a6cee3", "id": "Faroe Islands Shrimp Shark", "label": "Faroe Islands Shrimp Shark", "shape": "dot", "title": "company"}, {"color": "#a6cee3", "id": "Ocean Fisheries Llc", "label": "Ocean Fisheries Llc", "shape": "dot", "title": "notype"}]);
+                  edges = new vis.DataSet([{"from": "John Gonzalez", "title": "family_relationship", "to": "979893388"}, {"from": "979893388", "title": "ownership", "to": "Oceanfront Oasis Inc Carriers"}, {"from": "John Gonzalez", "title": "family_relationship", "to": "9345"}, {"from": "9345", "title": "membership", "to": "Mar de la Vida OJSC"}, {"from": "9345", "title": "ownership", "to": "979893388"}, {"from": "John Gonzalez", "title": "family_relationship", "to": "Sept"}, {"from": "Sept", "title": "family_relationship", "to": "979893388"}, {"from": "John Gonzalez", "title": "family_relationship", "to": "b1a0ee2a-0e6d-48c2-b639-032e4648fa5c"}, {"from": "b1a0ee2a-0e6d-48c2-b639-032e4648fa5c", "title": "membership", "to": "979893388"}, {"from": "John Gonzalez", "title": "family_relationship", "to": "f21800ca-b3c9-404b-8438-3d75ea84c409"}, {"from": "f21800ca-b3c9-404b-8438-3d75ea84c409", "title": "ownership", "to": "979893388"}, {"from": "John Gonzalez", "title": "membership", "to": "903311212"}, {"from": "903311212", "title": "membership", "to": "979893388"}, {"from": "John Gonzalez", "title": "membership", "to": "7505050"}, {"from": "7505050", "title": "membership", "to": "8327"}, {"from": "John Gonzalez", "title": "membership", "to": "Faroe Islands Shrimp Shark"}, {"from": "Faroe Islands Shrimp Shark", "title": "family_relationship", "to": "979893388"}, {"from": "John Gonzalez", "title": "ownership", "to": "Ocean Fisheries Llc"}, {"from": "Ocean Fisheries Llc", "title": "ownership", "to": "979893388"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 500px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 500px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "\u00e2\u0080\u009cillegal\u00e2", "image": "https://purepng.com/public/uploads/large/purepng.com-pirate-flagpirateact-of-robberycriminalviolenceshipboatattackerspirates-1421526962232bovj5.png ", "label": "\u00e2\u0080\u009cillegal\u00e2", "shape": "image", "title": "notype"}, {"color": "#a6cee3", "id": "5007554", "label": "5007554", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "\u00e2\u0080\u009cadjusting\u00e2", "label": "\u00e2\u0080\u009cadjusting\u00e2", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Tammy Garcia", "label": "Tammy Garcia", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "Znamensk Eel LLC United", "label": "Znamensk Eel LLC United", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Jamie Robinson", "label": "Jamie Robinson", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "Matthew Flores", "label": "Matthew Flores", "shape": "dot", "title": "person"}, {"color": "#97c2fc", "id": "John Gonzalez", "image": "https://www.pngall.com/wp-content/uploads/13/Futurama-PNG-File.png", "label": "John Gonzalez", "shape": "image", "title": "person"}, {"color": "#a6cee3", "id": "46901627", "label": "46901627", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "72630", "label": "72630", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Karen Delgado", "label": "Karen Delgado", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "17353795", "label": "17353795", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Timothy Austin", "label": "Timothy Austin", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "\u00e2\u0080\u009cinconsistencies\u00e2", "label": "\u00e2\u0080\u009cinconsistencies\u00e2", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Turkish Mussels Ltd. Liability Co Marine biology", "label": "Turkish Mussels Ltd. Liability Co Marine biology", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "6780", "label": "6780", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Sisdof/Sinaflor", "label": "Sisdof/Sinaflor", "shape": "dot", "title": "notype"}, {"color": "#97c2fc", "id": "\u00e2\u0080\u009cIllegal", "image": "https://purepng.com/public/uploads/large/purepng.com-pirate-flagpirateact-of-robberycriminalviolenceshipboatattackerspirates-1421526962232bovj5.png ", "label": "\u00e2\u0080\u009cIllegal", "shape": "image", "title": "notype"}, {"color": "#a6cee3", "id": "59", "label": "59", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Denise Diaz", "label": "Denise Diaz", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "Ryan Garrett", "label": "Ryan Garrett", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935", "label": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935", "shape": "dot", "title": "location"}, {"color": "#a6cee3", "id": "48259", "label": "48259", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Yu gan BV Investment", "label": "Yu gan BV Investment", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "143129355", "label": "143129355", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Gary Butler", "label": "Gary Butler", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "408119", "label": "408119", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Gary Smith", "label": "Gary Smith", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "Odisha Sea Dry dock LLC Consultants", "label": "Odisha Sea Dry dock LLC Consultants", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "SMILE", "label": "SMILE", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Amy Wilson", "label": "Amy Wilson", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "png xi  Line", "label": "png xi  Line", "shape": "dot", "title": "company"}, {"color": "#a6cee3", "id": "Erica Hamilton", "label": "Erica Hamilton", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "l y S.A. de C.V. International", "label": "l y S.A. de C.V. International", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "American", "label": "American", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Kerala Market Corp Consulting", "label": "Kerala Market Corp Consulting", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Ocean Trawlers", "label": "Ocean Trawlers", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Melinda Bentley", "label": "Melinda Bentley", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "pilot", "label": "pilot", "shape": "dot", "title": "vessel"}, {"color": "#a6cee3", "id": "9699687", "label": "9699687", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Spanish Shrimp  Carriers", "label": "Spanish Shrimp  Carriers", "shape": "dot", "title": "company"}, {"color": "#a6cee3", "id": "USINC", "label": "USINC", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "23837996", "label": "23837996", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "FishEye International", "label": "FishEye International", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "6471708", "label": "6471708", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Ht Shipping", "label": "Ht Shipping", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "4942", "label": "4942", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "967900443", "label": "967900443", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "47679", "label": "47679", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "621", "label": "621", "shape": "dot", "title": "political_organization"}, {"color": "#a6cee3", "id": "95", "label": "95", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Eugene Ochoa", "label": "Eugene Ochoa", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "341411", "label": "341411", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "175", "label": "175", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Mar del Oeste Pic", "label": "Mar del Oeste Pic", "shape": "dot", "title": "company"}, {"color": "#a6cee3", "id": "99233", "label": "99233", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "europeansting", "label": "europeansting", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Jammu \u0026 Kashmir Ltd Family", "label": "Jammu \u0026 Kashmir Ltd Family", "shape": "dot", "title": "company"}, {"color": "#a6cee3", "id": "Anne Anderson", "label": "Anne Anderson", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "Christopher Cunningham", "label": "Christopher Cunningham", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "\u00e2\u0080\u0160", "label": "\u00e2\u0080\u0160", "shape": "dot", "title": "event"}, {"color": "#a6cee3", "id": "1354", "label": "1354", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "7505050", "label": "7505050", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Gal\u00c3", "label": "Gal\u00c3", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Dana Goodwin", "label": "Dana Goodwin", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "b8567859-bf54-49fd-8332-5775e19c65af", "label": "b8567859-bf54-49fd-8332-5775e19c65af", "shape": "dot", "title": "location"}, {"color": "#a6cee3", "id": "Ms. Stephanie Rivera DDS", "label": "Ms. Stephanie Rivera DDS", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "435054320", "label": "435054320", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Playa del Cielo Kga", "label": "Playa del Cielo Kga", "shape": "dot", "title": "company"}, {"color": "#a6cee3", "id": "HMS Montrose", "label": "HMS Montrose", "shape": "dot", "title": "vessel"}, {"color": "#a6cee3", "id": "logo", "label": "logo", "shape": "dot", "title": "notype"}, {"color": "purple", "id": "8327", "label": "8327", "shape": "star", "title": "organization"}, {"color": "#a6cee3", "id": "Ocean Fisheries Llc", "label": "Ocean Fisheries Llc", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Today", "label": "Today", "shape": "dot", "title": "event"}, {"color": "#a6cee3", "id": "7657424", "label": "7657424", "shape": "dot", "title": "political_organization"}, {"color": "#a6cee3", "id": "Kristin Jones", "label": "Kristin Jones", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "222079892", "label": "222079892", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Dana Montes", "label": "Dana Montes", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "2919", "label": "2919", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Ships", "label": "Ships", "shape": "dot", "title": "vessel"}, {"color": "#a6cee3", "id": "740111283", "label": "740111283", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "\u00e2\u0080\u009cU", "label": "\u00e2\u0080\u009cU", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Conduct Joint", "label": "Conduct Joint", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Leng 999 Gal", "label": "Leng 999 Gal", "shape": "dot", "title": "vessel"}, {"color": "#a6cee3", "id": "884648", "label": "884648", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Marie Lee", "label": "Marie Lee", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "Calvin Salas", "label": "Calvin Salas", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "185106", "label": "185106", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "water", "label": "water", "shape": "dot", "title": "vessel"}, {"color": "#a6cee3", "id": "160", "label": "160", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "weeks", "label": "weeks", "shape": "dot", "title": "movement"}, {"color": "#a6cee3", "id": "Coast", "label": "Coast", "shape": "dot", "title": "vessel"}, {"color": "#a6cee3", "id": "40213337", "label": "40213337", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Seabreeze Foods Ltd. Corporation United", "label": "Seabreeze Foods Ltd. Corporation United", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "cutters", "label": "cutters", "shape": "dot", "title": "vessel"}, {"color": "#97c2fc", "id": "Dark Web Vendor Illegal Narcotics", "image": "https://purepng.com/public/uploads/large/purepng.com-pirate-flagpirateact-of-robberycriminalviolenceshipboatattackerspirates-1421526962232bovj5.png ", "label": "Dark Web Vendor Illegal Narcotics", "shape": "image", "title": "notype"}, {"color": "#a6cee3", "id": "Heroin Cocaine Exchange Bitcoin", "label": "Heroin Cocaine Exchange Bitcoin", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "label": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "shape": "dot", "title": "location"}, {"color": "#a6cee3", "id": "SeaSpray Wave SRL Solutions", "label": "SeaSpray Wave SRL Solutions", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "59662085", "label": "59662085", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Angela Hernandez", "label": "Angela Hernandez", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "XUAR", "label": "XUAR", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "\u00e2\u0080\u009cPublic Loaders", "label": "\u00e2\u0080\u009cPublic Loaders", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "\u00e2\u0080\u009ctheoriginaldragoncove\u00e2", "label": "\u00e2\u0080\u009ctheoriginaldragoncove\u00e2", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "7023", "label": "7023", "shape": "dot", "title": "political_organization"}, {"color": "#a6cee3", "id": "Randy Logan", "label": "Randy Logan", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "68273", "label": "68273", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "903311212", "label": "903311212", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "Elizabeth Martin", "label": "Elizabeth Martin", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "Aaron Bennett", "label": "Aaron Bennett", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "Kathleen Rowe", "label": "Kathleen Rowe", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "Jeffrey Hall", "label": "Jeffrey Hall", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "\u00e2\u0080\u009cHSI\u00e2", "label": "\u00e2\u0080\u009cHSI\u00e2", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "f2aee915-d483-4823-a030-9aac5e44c1fe", "label": "f2aee915-d483-4823-a030-9aac5e44c1fe", "shape": "dot", "title": "location"}, {"color": "#a6cee3", "id": "27d0dfe7-186c-4016-8f47-40c71e30f48a", "label": "27d0dfe7-186c-4016-8f47-40c71e30f48a", "shape": "dot", "title": "location"}, {"color": "#a6cee3", "id": "34", "label": "34", "shape": "dot", "title": "organization"}, {"color": "#a6cee3", "id": "36744944", "label": "36744944", "shape": "dot", "title": "political_organization"}, {"color": "#a6cee3", "id": "\u00e2\u0080\u009cNYPD\u00e2", "label": "\u00e2\u0080\u009cNYPD\u00e2", "shape": "dot", "title": "notype"}, {"color": "#a6cee3", "id": "Brett Moss", "label": "Brett Moss", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "Daniel Obrien", "label": "Daniel Obrien", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "374585759", "label": "374585759", "shape": "dot", "title": "political_organization"}, {"color": "#a6cee3", "id": "Samuel Cross", "label": "Samuel Cross", "shape": "dot", "title": "person"}, {"color": "#a6cee3", "id": "da75877e-ec57-42cc-82b9-de68c8d333e7", "label": "da75877e-ec57-42cc-82b9-de68c8d333e7", "shape": "dot", "title": "location"}, {"color": "#a6cee3", "id": "9345", "label": "9345", "shape": "dot", "title": "political_organization"}, {"color": "#a6cee3", "id": "Faroe Islands Shrimp Shark", "label": "Faroe Islands Shrimp Shark", "shape": "dot", "title": "company"}, {"color": "#a6cee3", "id": "The Salty Pearl River S.p.A. Export", "label": "The Salty Pearl River S.p.A. Export", "shape": "dot", "title": "company"}]);
+                  edges = new vis.DataSet([{"from": "\u00e2\u0080\u009cillegal\u00e2", "title": "partnership", "to": "5007554"}, {"from": "5007554", "title": "partnership", "to": "\u00e2\u0080\u009cadjusting\u00e2"}, {"from": "5007554", "title": "partnership", "to": "Tammy Garcia"}, {"from": "5007554", "title": "family_relationship", "to": "Znamensk Eel LLC United"}, {"from": "5007554", "title": "family_relationship", "to": "Jamie Robinson"}, {"from": "5007554", "title": "membership", "to": "Matthew Flores"}, {"from": "5007554", "title": "membership", "to": "John Gonzalez"}, {"from": "5007554", "title": "membership", "to": "46901627"}, {"from": "5007554", "title": "membership", "to": "72630"}, {"from": "5007554", "title": "ownership", "to": "Karen Delgado"}, {"from": "5007554", "title": "ownership", "to": "17353795"}, {"from": "5007554", "title": "ownership", "to": "Timothy Austin"}, {"from": "5007554", "title": "ownership", "to": "\u00e2\u0080\u009cinconsistencies\u00e2"}, {"from": "5007554", "title": "ownership", "to": "Turkish Mussels Ltd. Liability Co Marine biology"}, {"from": "5007554", "title": "ownership", "to": "6780"}, {"from": "5007554", "title": "ownership", "to": "Sisdof/Sinaflor"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "59"}, {"from": "59", "title": "partnership", "to": "Denise Diaz"}, {"from": "59", "title": "partnership", "to": "Ryan Garrett"}, {"from": "59", "title": "partnership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "59", "title": "partnership", "to": "48259"}, {"from": "59", "title": "partnership", "to": "Yu gan BV Investment"}, {"from": "59", "title": "partnership", "to": "143129355"}, {"from": "59", "title": "partnership", "to": "Gary Butler"}, {"from": "59", "title": "partnership", "to": "408119"}, {"from": "59", "title": "partnership", "to": "Gary Smith"}, {"from": "59", "title": "partnership", "to": "Odisha Sea Dry dock LLC Consultants"}, {"from": "59", "title": "partnership", "to": "SMILE"}, {"from": "59", "title": "family_relationship", "to": "Amy Wilson"}, {"from": "59", "title": "membership", "to": "png xi  Line"}, {"from": "59", "title": "membership", "to": "Erica Hamilton"}, {"from": "59", "title": "ownership", "to": "l y S.A. de C.V. International"}, {"from": "59", "title": "ownership", "to": "American"}, {"from": "59", "title": "ownership", "to": "Kerala Market Corp Consulting"}, {"from": "59", "title": "ownership", "to": "Ocean Trawlers"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "Odisha Sea Dry dock LLC Consultants"}, {"from": "Odisha Sea Dry dock LLC Consultants", "title": "partnership", "to": "SMILE"}, {"from": "Odisha Sea Dry dock LLC Consultants", "title": "partnership", "to": "Yu gan BV Investment"}, {"from": "Odisha Sea Dry dock LLC Consultants", "title": "partnership", "to": "143129355"}, {"from": "Odisha Sea Dry dock LLC Consultants", "title": "partnership", "to": "Ryan Garrett"}, {"from": "Odisha Sea Dry dock LLC Consultants", "title": "ownership", "to": "Gary Smith"}, {"from": "Odisha Sea Dry dock LLC Consultants", "title": "ownership", "to": "408119"}, {"from": "Odisha Sea Dry dock LLC Consultants", "title": "ownership", "to": "Denise Diaz"}, {"from": "Odisha Sea Dry dock LLC Consultants", "title": "ownership", "to": "Gary Butler"}, {"from": "Odisha Sea Dry dock LLC Consultants", "title": "ownership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "Odisha Sea Dry dock LLC Consultants", "title": "ownership", "to": "48259"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "Ryan Garrett"}, {"from": "Ryan Garrett", "title": "partnership", "to": "Yu gan BV Investment"}, {"from": "Ryan Garrett", "title": "partnership", "to": "143129355"}, {"from": "Ryan Garrett", "title": "family_relationship", "to": "Gary Smith"}, {"from": "Ryan Garrett", "title": "family_relationship", "to": "Gary Butler"}, {"from": "Ryan Garrett", "title": "family_relationship", "to": "Denise Diaz"}, {"from": "Ryan Garrett", "title": "ownership", "to": "408119"}, {"from": "Ryan Garrett", "title": "ownership", "to": "48259"}, {"from": "Ryan Garrett", "title": "ownership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "Ryan Garrett", "title": "ownership", "to": "SMILE"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "Gary Butler"}, {"from": "Gary Butler", "title": "partnership", "to": "SMILE"}, {"from": "Gary Butler", "title": "partnership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "Gary Butler", "title": "partnership", "to": "48259"}, {"from": "Gary Butler", "title": "partnership", "to": "143129355"}, {"from": "Gary Butler", "title": "family_relationship", "to": "Denise Diaz"}, {"from": "Gary Butler", "title": "ownership", "to": "Yu gan BV Investment"}, {"from": "Gary Butler", "title": "ownership", "to": "408119"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "143129355"}, {"from": "143129355", "title": "partnership", "to": "408119"}, {"from": "143129355", "title": "partnership", "to": "Yu gan BV Investment"}, {"from": "143129355", "title": "partnership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "143129355", "title": "partnership", "to": "Denise Diaz"}, {"from": "143129355", "title": "partnership", "to": "48259"}, {"from": "143129355", "title": "partnership", "to": "Gary Smith"}, {"from": "143129355", "title": "partnership", "to": "SMILE"}, {"from": "143129355", "title": "membership", "to": "Melinda Bentley"}, {"from": "143129355", "title": "membership", "to": "pilot"}, {"from": "143129355", "title": "membership", "to": "9699687"}, {"from": "143129355", "title": "ownership", "to": "Spanish Shrimp  Carriers"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "408119"}, {"from": "408119", "title": "partnership", "to": "Yu gan BV Investment"}, {"from": "408119", "title": "partnership", "to": "48259"}, {"from": "408119", "title": "partnership", "to": "SMILE"}, {"from": "408119", "title": "membership", "to": "USINC"}, {"from": "408119", "title": "membership", "to": "23837996"}, {"from": "408119", "title": "ownership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "408119", "title": "ownership", "to": "Denise Diaz"}, {"from": "408119", "title": "ownership", "to": "Gary Smith"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "Yu gan BV Investment"}, {"from": "Yu gan BV Investment", "title": "partnership", "to": "48259"}, {"from": "Yu gan BV Investment", "title": "partnership", "to": "SMILE"}, {"from": "Yu gan BV Investment", "title": "membership", "to": "FishEye International"}, {"from": "Yu gan BV Investment", "title": "ownership", "to": "6471708"}, {"from": "Yu gan BV Investment", "title": "ownership", "to": "Ht Shipping"}, {"from": "Yu gan BV Investment", "title": "ownership", "to": "Denise Diaz"}, {"from": "Yu gan BV Investment", "title": "ownership", "to": "Gary Smith"}, {"from": "Yu gan BV Investment", "title": "ownership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "Yu gan BV Investment", "title": "ownership", "to": "4942"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "SMILE"}, {"from": "SMILE", "title": "partnership", "to": "Gary Smith"}, {"from": "SMILE", "title": "partnership", "to": "48259"}, {"from": "SMILE", "title": "ownership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "SMILE", "title": "ownership", "to": "Denise Diaz"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "967900443"}, {"from": "967900443", "title": "partnership", "to": "47679"}, {"from": "967900443", "title": "partnership", "to": "621"}, {"from": "967900443", "title": "family_relationship", "to": "95"}, {"from": "967900443", "title": "family_relationship", "to": "Eugene Ochoa"}, {"from": "967900443", "title": "family_relationship", "to": "341411"}, {"from": "967900443", "title": "family_relationship", "to": "175"}, {"from": "967900443", "title": "membership", "to": "Mar del Oeste Pic"}, {"from": "967900443", "title": "membership", "to": "99233"}, {"from": "967900443", "title": "membership", "to": "europeansting"}, {"from": "967900443", "title": "membership", "to": "Jammu \u0026 Kashmir Ltd Family"}, {"from": "967900443", "title": "membership", "to": "Anne Anderson"}, {"from": "967900443", "title": "membership", "to": "Christopher Cunningham"}, {"from": "967900443", "title": "ownership", "to": "\u00e2\u0080\u0160"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "48259"}, {"from": "48259", "title": "partnership", "to": "Gary Smith"}, {"from": "48259", "title": "ownership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "48259", "title": "ownership", "to": "1354"}, {"from": "48259", "title": "ownership", "to": "Denise Diaz"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "partnership", "to": "Gary Smith"}, {"from": "Gary Smith", "title": "family_relationship", "to": "Denise Diaz"}, {"from": "Gary Smith", "title": "ownership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "membership", "to": "7505050"}, {"from": "7505050", "title": "partnership", "to": "Gal\u00c3"}, {"from": "7505050", "title": "family_relationship", "to": "Dana Goodwin"}, {"from": "7505050", "title": "family_relationship", "to": "b8567859-bf54-49fd-8332-5775e19c65af"}, {"from": "7505050", "title": "family_relationship", "to": "Ms. Stephanie Rivera DDS"}, {"from": "7505050", "title": "family_relationship", "to": "435054320"}, {"from": "7505050", "title": "family_relationship", "to": "Playa del Cielo Kga"}, {"from": "7505050", "title": "membership", "to": "HMS Montrose"}, {"from": "7505050", "title": "membership", "to": "logo"}, {"from": "7505050", "title": "membership", "to": "Spanish Shrimp  Carriers"}, {"from": "7505050", "title": "membership", "to": "John Gonzalez"}, {"from": "7505050", "title": "membership", "to": "8327"}, {"from": "7505050", "title": "membership", "to": "Ocean Fisheries Llc"}, {"from": "7505050", "title": "membership", "to": "Today"}, {"from": "7505050", "title": "ownership", "to": "7657424"}, {"from": "7505050", "title": "ownership", "to": "Kristin Jones"}, {"from": "7505050", "title": "ownership", "to": "222079892"}, {"from": "7505050", "title": "ownership", "to": "png xi  Line"}, {"from": "7505050", "title": "ownership", "to": "Dana Montes"}, {"from": "7505050", "title": "ownership", "to": "2919"}, {"from": "7505050", "title": "ownership", "to": "Ships"}, {"from": "7505050", "title": "ownership", "to": "740111283"}, {"from": "7505050", "title": "ownership", "to": "\u00e2\u0080\u009cU"}, {"from": "7505050", "title": "ownership", "to": "Conduct Joint"}, {"from": "7505050", "title": "ownership", "to": "Leng 999 Gal"}, {"from": "7505050", "title": "ownership", "to": "884648"}, {"from": "7505050", "title": "ownership", "to": "Marie Lee"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "membership", "to": "8327"}, {"from": "8327", "title": "partnership", "to": "Calvin Salas"}, {"from": "8327", "title": "partnership", "to": "185106"}, {"from": "8327", "title": "membership", "to": "water"}, {"from": "8327", "title": "membership", "to": "Today"}, {"from": "8327", "title": "membership", "to": "160"}, {"from": "8327", "title": "membership", "to": "435054320"}, {"from": "8327", "title": "ownership", "to": "weeks"}, {"from": "8327", "title": "ownership", "to": "Coast"}, {"from": "8327", "title": "ownership", "to": "40213337"}, {"from": "8327", "title": "ownership", "to": "Seabreeze Foods Ltd. Corporation United"}, {"from": "8327", "title": "ownership", "to": "cutters"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "ownership", "to": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935"}, {"from": "6ead18ca-3084-4f8e-9c1e-a5e470fc5935", "title": "ownership", "to": "Denise Diaz"}, {"from": "\u00e2\u0080\u009cIllegal", "title": "ownership", "to": "Denise Diaz"}, {"from": "Dark Web Vendor Illegal Narcotics", "title": "partnership", "to": "Heroin Cocaine Exchange Bitcoin"}, {"from": "Heroin Cocaine Exchange Bitcoin", "title": "partnership", "to": "d4947401-8ec7-48b9-a66f-45d983d59e0a"}, {"from": "Heroin Cocaine Exchange Bitcoin", "title": "ownership", "to": "SeaSpray Wave SRL Solutions"}, {"from": "Dark Web Vendor Illegal Narcotics", "title": "ownership", "to": "d4947401-8ec7-48b9-a66f-45d983d59e0a"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "59662085"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "Mar del Oeste Pic"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "Angela Hernandez"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "XUAR"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "\u00e2\u0080\u009cPublic Loaders"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "\u00e2\u0080\u009ctheoriginaldragoncove\u00e2"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "7023"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "Randy Logan"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "68273"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "903311212"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "Elizabeth Martin"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "Aaron Bennett"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "partnership", "to": "Kathleen Rowe"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "family_relationship", "to": "John Gonzalez"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "Jeffrey Hall"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "\u00e2\u0080\u009cHSI\u00e2"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "f2aee915-d483-4823-a030-9aac5e44c1fe"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "27d0dfe7-186c-4016-8f47-40c71e30f48a"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "23837996"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "USINC"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "34"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "36744944"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "SeaSpray Wave SRL Solutions"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "png xi  Line"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "\u00e2\u0080\u009cNYPD\u00e2"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "Brett Moss"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "Daniel Obrien"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "374585759"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "Samuel Cross"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "da75877e-ec57-42cc-82b9-de68c8d333e7"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "membership", "to": "9345"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "ownership", "to": "Faroe Islands Shrimp Shark"}, {"from": "d4947401-8ec7-48b9-a66f-45d983d59e0a", "title": "ownership", "to": "The Salty Pearl River S.p.A. Export"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

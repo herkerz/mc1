@@ -4,7 +4,7 @@ import csv
 # Neo4j connection details
 uri = "bolt://localhost:7687"
 username = "neo4j"
-password = "PASSWORD"
+password = "a"
 
 # CSV file path
 csv_file = "links.csv"
